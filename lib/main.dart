@@ -1,10 +1,27 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:appronda/widgets/auth_wrapper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  
+  if (kIsWeb) {
+    await Firebase.initializeApp(
+      options: const FirebaseOptions(
+        apiKey: "AIzaSyAEa4gAzfkVx1NDOkYdi4s5ug7k4lSG-Lw",
+        authDomain: "jammalam-54b26.firebaseapp.com",
+        projectId: "jammalam-54b26",
+        storageBucket: "jammalam-54b26.firebasestorage.app",
+        messagingSenderId: "697868931580",
+        appId: "1:697868931580:web:5adb6617f5efd57662e279",
+        measurementId: "G-KT71XEQW88",
+      ),
+    );
+  } else {
+    await Firebase.initializeApp();
+  }
+  
   runApp(const MyApp());
 }
 
