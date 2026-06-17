@@ -39,11 +39,11 @@ class HomeScreen extends StatelessWidget {
                   title: const Text('Keluar Akun', style: TextStyle(color: Colors.white)),
                   content: const Text(
                     'Apakah Anda yakin ingin keluar dari aplikasi?',
-                    style: TextStyle(color: Colors.slate),
+                    style: TextStyle(color: Colors.grey),
                   ),
                   actions: [
                     TextButton(
-                      child: const Text('Batal', style: TextStyle(color: Colors.slate)),
+                      child: const Text('Batal', style: TextStyle(color: Colors.grey)),
                       onPressed: () => Navigator.pop(context),
                     ),
                     ElevatedButton(
@@ -78,7 +78,7 @@ class HomeScreen extends StatelessWidget {
                     end: Alignment.bottomRight,
                   ),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.slate[800]!),
+                  border: Border.all(color: Colors.blueGrey[800]!),
                 ),
                 child: Row(
                   children: [
@@ -94,7 +94,7 @@ class HomeScreen extends StatelessWidget {
                         children: [
                           Text(
                             'Selamat Datang,',
-                            style: TextStyle(color: Colors.slate[400], fontSize: 14),
+                            style: TextStyle(color: Colors.blueGrey[400], fontSize: 14),
                           ),
                           const SizedBox(height: 4),
                           Text(
@@ -139,7 +139,7 @@ class HomeScreen extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 14,
-                        color: Colors.slate[400],
+                        color: Colors.blueGrey[400],
                         height: 1.5,
                       ),
                     ),

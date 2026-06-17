@@ -96,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.slate[400],
+                    color: Colors.blueGrey[400],
                   ),
                 ),
                 const SizedBox(height: 40),
@@ -107,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   decoration: BoxDecoration(
                     color: const Color(0xFF1E293B), // Slate 800
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.slate[700]!, width: 1),
+                    border: Border.all(color: Colors.blueGrey[700]!, width: 1),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.3),
@@ -138,11 +138,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             labelText: 'Email',
-                            labelStyle: TextStyle(color: Colors.slate[400]),
-                            prefixIcon: Icon(Icons.email_outlined, color: Colors.slate[400]),
+                            labelStyle: TextStyle(color: Colors.blueGrey[400]),
+                            prefixIcon: Icon(Icons.email_outlined, color: Colors.blueGrey[400]),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Colors.slate[700]!),
+                              borderSide: BorderSide(color: Colors.blueGrey[700]!),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -176,12 +176,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             labelText: 'Password',
-                            labelStyle: TextStyle(color: Colors.slate[400]),
-                            prefixIcon: Icon(Icons.lock_outline, color: Colors.slate[400]),
+                            labelStyle: TextStyle(color: Colors.blueGrey[400]),
+                            prefixIcon: Icon(Icons.lock_outline, color: Colors.blueGrey[400]),
                             suffixIcon: IconButton(
                               icon: Icon(
                                 _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                                color: Colors.slate[400],
+                                color: Colors.blueGrey[400],
                               ),
                               onPressed: () {
                                 setState(() {
@@ -191,7 +191,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Colors.slate[700]!),
+                              borderSide: BorderSide(color: Colors.blueGrey[700]!),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -261,7 +261,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     Text(
                       'Belum punya akun? ',
-                      style: TextStyle(color: Colors.slate[400]),
+                      style: TextStyle(color: Colors.blueGrey[400]),
                     ),
                     GestureDetector(
                       onTap: () {
