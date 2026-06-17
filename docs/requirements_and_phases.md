@@ -65,9 +65,9 @@ graph TD
 * [x] Inisialisasi Firebase pada fungsi `main()` di `lib/main.dart`.
 
 ### **Fase 2: Autentikasi Pengguna**
-* [ ] Membuat UI Halaman Login & Register dengan validasi input (email valid, password minimal 6 karakter).
-* [ ] Membuat *Authentication Service* untuk membungkus fungsi `signInWithEmailAndPassword`, `createUserWithEmailAndPassword`, dan `signOut`.
-* [ ] Mengimplementasikan *Auth State Wrapper* untuk mengarahkan pengguna secara otomatis ke Halaman Utama jika sudah login, atau ke Halaman Login jika belum.
+* [x] Membuat UI Halaman Login & Register dengan validasi input (email valid, password minimal 6 karakter).
+* [x] Membuat *Authentication Service* untuk membungkus fungsi `signInWithEmailAndPassword`, `createUserWithEmailAndPassword`, dan `signOut`.
+* [x] Mengimplementasikan *Auth State Wrapper* untuk mengarahkan pengguna secara otomatis ke Halaman Utama jika sudah login, atau ke Halaman Login jika belum.
 
 ### **Fase 3: Implementasi CRUD Jadwal Ronda**
 * [ ] Menentukan skema data (Model Jadwal Ronda):
