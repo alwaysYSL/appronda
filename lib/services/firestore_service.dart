@@ -244,14 +244,15 @@ class FirestoreService {
   // --- PANIC BUTTON / EMERGENCY ALERTS ---
 
   // Trigger emergency alarm
-  Future<void> triggerPanicAlert(String userId, String userEmail) async {
+  Future<String> triggerPanicAlert(String userId, String userEmail) async {
     try {
-      await _db.collection('alerts').add({
+      DocumentReference docRef = await _db.collection('alerts').add({
         'userId': userId,
         'userEmail': userEmail,
         'timestamp': FieldValue.serverTimestamp(),
         'status': 'active',
       });
+      return docRef.id;
     } catch (e) {
       throw 'Gagal memicu alarm darurat: $e';
     }
@@ -281,6 +282,19 @@ class FirestoreService {
       });
     } catch (e) {
       throw 'Gagal menonaktifkan alarm: $e';
+    }
+  }
+
+  // Get list of all registered user emails
+  Future<List<String>> getAllUserEmails() async {
+    try {
+      QuerySnapshot snapshot = await _db.collection('users').get();
+      return snapshot.docs.map((doc) {
+        final data = doc.data() as Map<String, dynamic>? ?? {};
+        return data['email'] as String? ?? '';
+      }).where((email) => email.isNotEmpty).toList();
+    } catch (e) {
+      return [];
     }
   }
 }

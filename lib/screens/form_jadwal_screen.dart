@@ -22,6 +22,8 @@ class _FormJadwalScreenState extends State<FormJadwalScreen> {
   final List<TextEditingController> _petugasControllers = [];
 
   bool _isLoading = false;
+  List<String> _availableEmails = [];
+  bool _isLoadingEmails = true;
 
   final List<String> _daftarHari = [
     'Senin',
@@ -36,6 +38,7 @@ class _FormJadwalScreenState extends State<FormJadwalScreen> {
   @override
   void initState() {
     super.initState();
+    _loadWargaEmails();
     
     // Inisialisasi data jika mode edit
     if (widget.jadwal != null) {
@@ -63,6 +66,20 @@ class _FormJadwalScreenState extends State<FormJadwalScreen> {
       controller.dispose();
     }
     super.dispose();
+  }
+
+  Future<void> _loadWargaEmails() async {
+    try {
+      List<String> emails = await _firestoreService.getAllUserEmails();
+      setState(() {
+        _availableEmails = emails;
+        _isLoadingEmails = false;
+      });
+    } catch (_) {
+      setState(() {
+        _isLoadingEmails = false;
+      });
+    }
   }
 
   void _tambahPetugasField() {
@@ -408,43 +425,100 @@ class _FormJadwalScreenState extends State<FormJadwalScreen> {
                           return Row(
                             children: [
                               Expanded(
-                                child: TextFormField(
-                                  controller: _petugasControllers[index],
-                                  style: const TextStyle(color: Colors.white),
-                                  decoration: InputDecoration(
-                                    hintText: 'Nama Petugas ${index + 1}',
-                                    hintStyle: TextStyle(
-                                        color: Colors.blueGrey[500]),
-                                    prefixIcon: const Icon(Icons.person_outline,
-                                        color: Colors.blueGrey),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                      borderSide: BorderSide(
-                                          color: Colors.blueGrey[700]!),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                      borderSide: const BorderSide(
-                                          color: Colors.cyanAccent, width: 2),
-                                    ),
-                                    errorBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                      borderSide: const BorderSide(
-                                          color: Colors.redAccent),
-                                    ),
-                                    focusedErrorBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                      borderSide: const BorderSide(
-                                          color: Colors.redAccent, width: 2),
-                                    ),
-                                  ),
-                                  validator: (value) {
-                                    if (value == null || value.trim().isEmpty) {
-                                      return 'Nama petugas tidak boleh kosong';
-                                    }
-                                    return null;
-                                  },
-                                ),
+                                child: _isLoadingEmails
+                                    ? const Center(
+                                        child: SizedBox(
+                                          height: 20,
+                                          width: 20,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            color: Colors.cyanAccent,
+                                          ),
+                                        ),
+                                      )
+                                    : _availableEmails.isEmpty
+                                        ? TextFormField(
+                                            controller: _petugasControllers[index],
+                                            style: const TextStyle(color: Colors.white),
+                                            decoration: InputDecoration(
+                                              hintText: 'Email Petugas ${index + 1}',
+                                              hintStyle: TextStyle(color: Colors.blueGrey[500]),
+                                              prefixIcon: const Icon(Icons.person_outline, color: Colors.blueGrey),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderRadius: BorderRadius.circular(12),
+                                                borderSide: BorderSide(color: Colors.blueGrey[700]!),
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderRadius: BorderRadius.circular(12),
+                                                borderSide: const BorderSide(color: Colors.cyanAccent, width: 2),
+                                              ),
+                                              errorBorder: OutlineInputBorder(
+                                                borderRadius: BorderRadius.circular(12),
+                                                borderSide: const BorderSide(color: Colors.redAccent),
+                                              ),
+                                              focusedErrorBorder: OutlineInputBorder(
+                                                borderRadius: BorderRadius.circular(12),
+                                                borderSide: const BorderSide(color: Colors.redAccent, width: 2),
+                                              ),
+                                            ),
+                                            validator: (value) {
+                                              if (value == null || value.trim().isEmpty) {
+                                                return 'Email petugas tidak boleh kosong';
+                                              }
+                                              return null;
+                                            },
+                                          )
+                                        : DropdownButtonFormField<String>(
+                                            initialValue: _petugasControllers[index].text.isNotEmpty && _availableEmails.contains(_petugasControllers[index].text)
+                                                ? _petugasControllers[index].text
+                                                : null,
+                                            dropdownColor: const Color(0xFF1E293B),
+                                            style: const TextStyle(color: Colors.white),
+                                            decoration: InputDecoration(
+                                              hintText: 'Pilih Email Petugas ${index + 1}',
+                                              hintStyle: TextStyle(color: Colors.blueGrey[500]),
+                                              prefixIcon: const Icon(Icons.person_outline, color: Colors.blueGrey),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderRadius: BorderRadius.circular(12),
+                                                borderSide: BorderSide(color: Colors.blueGrey[700]!),
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderRadius: BorderRadius.circular(12),
+                                                borderSide: const BorderSide(color: Colors.cyanAccent, width: 2),
+                                              ),
+                                              errorBorder: OutlineInputBorder(
+                                                borderRadius: BorderRadius.circular(12),
+                                                borderSide: const BorderSide(color: Colors.redAccent),
+                                              ),
+                                              focusedErrorBorder: OutlineInputBorder(
+                                                borderRadius: BorderRadius.circular(12),
+                                                borderSide: const BorderSide(color: Colors.redAccent, width: 2),
+                                              ),
+                                            ),
+                                            items: _availableEmails.map((email) {
+                                              return DropdownMenuItem(
+                                                value: email,
+                                                child: Text(
+                                                  email,
+                                                  style: const TextStyle(fontSize: 13),
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                              );
+                                            }).toList(),
+                                            onChanged: (value) {
+                                              if (value != null) {
+                                                setState(() {
+                                                  _petugasControllers[index].text = value;
+                                                });
+                                              }
+                                            },
+                                            validator: (value) {
+                                              if (value == null || value.isEmpty) {
+                                                return 'Silakan pilih petugas';
+                                              }
+                                              return null;
+                                            },
+                                          ),
                               ),
                               const SizedBox(width: 8),
                               IconButton(

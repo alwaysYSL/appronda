@@ -38,6 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // Sound URL untuk sirine alarm darurat
   final String _sirenAudioUrl = 'https://www.soundjay.com/buttons/beep-01a.mp3'; 
   bool _isAlarmPlaying = false;
+  String? _myActiveAlertId;
 
   @override
   void initState() {
@@ -274,11 +275,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _pemicuTombolPanik(String userId, String userEmail) async {
     try {
-      await _firestoreService.triggerPanicAlert(userId, userEmail);
+      // 1. Trigger panic alert in Firestore and store the document ID
+      String alertId = await _firestoreService.triggerPanicAlert(userId, userEmail);
+      _myActiveAlertId = alertId;
+      
       setState(() {
         _isAlarmPlaying = true;
       });
-      await _audioPlayer.play(UrlSource(_sirenAudioUrl));
       
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -287,6 +290,13 @@ class _HomeScreenState extends State<HomeScreen> {
             backgroundColor: Colors.redAccent,
           ),
         );
+      }
+
+      // 2. Play Audio siren - wrapped in try-catch so Web MissingPluginException doesn't crash the UI!
+      try {
+        await _audioPlayer.play(UrlSource(_sirenAudioUrl));
+      } catch (audioError) {
+        debugPrint("Gagal memutar audio: $audioError");
       }
     } catch (e) {
       if (mounted) {
@@ -301,12 +311,22 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _matikanAlarmLokal() async {
+    // 1. Stop audio player
     try {
       await _audioPlayer.stop();
-      setState(() {
-        _isAlarmPlaying = false;
-      });
     } catch (_) {}
+    
+    // 2. Resolve alert in Firestore if we have the active ID
+    if (_myActiveAlertId != null) {
+      try {
+        await _firestoreService.resolvePanicAlert(_myActiveAlertId!);
+        _myActiveAlertId = null;
+      } catch (_) {}
+    }
+    
+    setState(() {
+      _isAlarmPlaying = false;
+    });
   }
 
   // --- TABS RENDERING ---
