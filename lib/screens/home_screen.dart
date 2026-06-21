@@ -34,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // State untuk check-in loading
   bool _isCheckingIn = false;
+  bool _hasShownReminder = false;
 
   // Sound URL untuk sirine alarm darurat
   final String _sirenAudioUrl = 'https://www.soundjay.com/buttons/beep-01a.mp3'; 
@@ -171,6 +172,42 @@ class _HomeScreenState extends State<HomeScreen> {
                 }
               }
             },
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _tampilkanReminderDialog(JadwalRonda jadwal) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFF1E293B),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Row(
+          children: [
+            Icon(Icons.notifications_active_rounded, color: Colors.cyanAccent),
+            SizedBox(width: 8),
+            Text(
+              'Pengingat Tugas',
+              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+          ],
+        ),
+        content: Text(
+          'Halo! Ini adalah pengingat bahwa Anda dijadwalkan bertugas ronda malam hari ini di area: ${jadwal.area}.\n\nHarap bersiap-siap dan jangan lupa melakukan presensi kehadiran (check-in) saat mulai bertugas.',
+          style: const TextStyle(color: Colors.grey, height: 1.4, fontSize: 13),
+        ),
+        actions: [
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.cyanAccent,
+              foregroundColor: Colors.black,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            ),
+            child: const Text('Siap, Dimengerti', style: TextStyle(fontWeight: FontWeight.bold)),
+            onPressed: () => Navigator.pop(context),
           ),
         ],
       ),
@@ -367,6 +404,13 @@ class _HomeScreenState extends State<HomeScreen> {
         todayJadwal = j;
         break;
       }
+    }
+
+    if (todayJadwal != null && !_hasShownReminder) {
+      _hasShownReminder = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _tampilkanReminderDialog(todayJadwal!);
+      });
     }
 
     return Column(
