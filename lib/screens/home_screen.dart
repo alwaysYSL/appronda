@@ -666,6 +666,14 @@ class _HomeScreenState extends State<HomeScreen> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator(color: Colors.cyanAccent));
         }
+        if (snapshot.hasError) {
+          return Center(
+            child: Text(
+              'Gagal memuat laporan: ${snapshot.error}',
+              style: const TextStyle(color: Colors.redAccent),
+            ),
+          );
+        }
 
         final laporanList = snapshot.data ?? [];
 
@@ -764,6 +772,14 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator(color: Colors.cyanAccent));
+        }
+        if (snapshot.hasError) {
+          return Center(
+            child: Text(
+              'Gagal memuat swap request: ${snapshot.error}',
+              style: const TextStyle(color: Colors.redAccent),
+            ),
+          );
         }
 
         final requests = snapshot.data ?? [];

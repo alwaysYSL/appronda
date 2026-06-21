@@ -185,10 +185,11 @@ class FirestoreService {
     return _db
         .collection('swap_requests')
         .where('status', isEqualTo: 'pending')
-        .orderBy('tanggal', descending: false)
         .snapshots()
         .map((snapshot) {
-          return snapshot.docs.map((doc) => SwapRequest.fromDocument(doc)).toList();
+          final list = snapshot.docs.map((doc) => SwapRequest.fromDocument(doc)).toList();
+          list.sort((a, b) => a.tanggal.compareTo(b.tanggal));
+          return list;
         });
   }
 
