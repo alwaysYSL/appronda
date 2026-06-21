@@ -121,21 +121,21 @@ graph TD
 * [x] Menambahkan tombol/aksi Hapus Jadwal dengan dialog konfirmasi agar tidak terhapus secara tidak sengaja.
 
 ### **Fase 4: Implementasi Fitur Tambahan & Media**
-* [ ] **Absensi/Presensi Ronda:**
+* [x] **Absensi/Presensi Ronda:**
   * Membuat koleksi `presensi` di Firestore.
-  * Implementasi tombol "Mulai Ronda" yang mendeteksi GPS koordinat dan mengambil foto selfie via `image_picker`, lalu mengunggahnya ke `Firebase Storage`.
-* [ ] **Laporan Kejadian (Patrol Log):**
+  * Implementasi tombol "Mulai Ronda" yang mendeteksi GPS koordinat dan mengambil foto selfie via `image_picker` (disimpan dalam format Base64 di Firestore).
+* [x] **Laporan Kejadian (Patrol Log):**
   * Membuat koleksi `laporan` di Firestore.
-  * Implementasi form laporan kejadian (deskripsi teks & upload foto).
-  * Membuat halaman daftar laporan patroli yang bisa dilihat oleh warga lain.
-* [ ] **Tukar Jadwal (Schedule Swap):**
+  * Implementasi form laporan kejadian (deskripsi teks & foto Base64).
+  * Membuat halaman daftar laporan patroli yang bisa dilihat oleh warga lain secara real-time.
+* [x] **Tukar Jadwal (Schedule Swap):**
   * Membuat koleksi `swap_requests` di Firestore.
   * Membuat fitur ajukan permohonan swap dan tombol "Bantu Ronda" bagi warga lain.
-* [ ] **Kontak Darurat & Panic Button:**
+* [x] **Kontak Darurat & Panic Button:**
   * Membuat halaman Kontak Darurat yang terintegrasi dengan `url_launcher`.
-  * Membuat tombol panik yang memicu alarm suara lokal dan mengirim data darurat ke Firestore untuk men-trigger alert real-time ke semua user yang sedang online.
-* [ ] **Notifikasi Pengingat:**
-  * Setup `flutter_local_notifications` untuk mengirim pengingat jadwal ronda terjadwal.
+  * Membuat tombol panik yang memicu alarm suara lokal dan mengirim data darurat ke Firestore untuk men-trigger alert real-time (global alert overlay) ke semua user yang sedang online.
+* [x] **Notifikasi Pengingat:**
+  * Implementasi dialog peringatan penugasan/ronda di UI aplikasi sebagai alternatif push notification pada web.
 
 ### **Fase 5: Polishing UI, Roles & Penanganan Error**
 * [ ] Menerapkan estetika premium: Warna tema yang harmonis (contoh: Navy, Dark Teal, atau Slate Blue), sudut membulat (*border radius*), serta *spacing* yang rapi.
