@@ -19,6 +19,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
   String? _errorMessage;
+  String _selectedRole = 'warga';
 
   @override
   void dispose() {
@@ -40,6 +41,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       await _authService.signUp(
         _emailController.text.trim(),
         _passwordController.text.trim(),
+        _selectedRole,
       );
       // Success: Pop back to Login screen (AuthWrapper will automatically route to Home if logged in)
       if (mounted) {
@@ -55,12 +57,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
       setState(() {
         _errorMessage = e.toString();
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(_errorMessage!),
-          backgroundColor: Colors.redAccent,
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(_errorMessage!),
+            backgroundColor: Colors.redAccent,
+          ),
+        );
+      }
     } finally {
       if (mounted) {
         setState(() {
@@ -129,7 +133,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     border: Border.all(color: Colors.blueGrey[700]!, width: 1),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.3),
+                        color: Colors.black.withValues(alpha: 0.3),
                         blurRadius: 15,
                         offset: const Offset(0, 10),
                       ),
@@ -274,6 +278,44 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             return null;
                           },
                         ),
+                        const SizedBox(height: 16),
+
+                        // Role Dropdown
+                        DropdownButtonFormField<String>(
+                          initialValue: _selectedRole,
+                          dropdownColor: const Color(0xFF1E293B),
+                          style: const TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                            labelText: 'Pilih Peran (Role)',
+                            labelStyle: TextStyle(color: Colors.blueGrey[400]),
+                            prefixIcon: Icon(Icons.badge_outlined, color: Colors.blueGrey[400]),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(color: Colors.blueGrey[700]!),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(color: Colors.cyanAccent, width: 2),
+                            ),
+                          ),
+                          items: const [
+                            DropdownMenuItem(
+                              value: 'warga',
+                              child: Text('Warga (Lihat Jadwal)'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'admin',
+                              child: Text('Admin (Kelola Jadwal)'),
+                            ),
+                          ],
+                          onChanged: (value) {
+                            if (value != null) {
+                              setState(() {
+                                _selectedRole = value;
+                              });
+                            }
+                          },
+                        ),
                         const SizedBox(height: 24),
 
                         // Register Button
@@ -287,7 +329,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                             elevation: 5,
-                            shadowColor: Colors.cyanAccent.withOpacity(0.3),
+                            shadowColor: Colors.cyanAccent.withValues(alpha: 0.3),
                           ),
                           child: _isLoading
                               ? const SizedBox(

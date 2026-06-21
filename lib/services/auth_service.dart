@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:appronda/services/firestore_service.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirestoreService _firestoreService = FirestoreService();
 
   // Stream of auth state changes (logged in/out)
   Stream<User?> get authStateChanges => _auth.authStateChanges();
@@ -24,13 +26,23 @@ class AuthService {
     }
   }
 
-  // Register / Sign up with email and password
-  Future<UserCredential?> signUp(String email, String password) async {
+  // Register / Sign up with email, password, and role
+  Future<UserCredential?> signUp(String email, String password, String role) async {
     try {
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+      
+      // If registration succeeds, write user profile with role
+      if (userCredential.user != null) {
+        await _firestoreService.createUserProfile(
+          userCredential.user!.uid,
+          email,
+          role,
+        );
+      }
+      
       return userCredential;
     } on FirebaseAuthException catch (e) {
       throw _handleAuthException(e);

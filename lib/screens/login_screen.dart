@@ -44,12 +44,14 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         _errorMessage = e.toString();
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(_errorMessage!),
-          backgroundColor: Colors.redAccent,
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(_errorMessage!),
+            backgroundColor: Colors.redAccent,
+          ),
+        );
+      }
     } finally {
       if (mounted) {
         setState(() {
@@ -110,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     border: Border.all(color: Colors.blueGrey[700]!, width: 1),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.3),
+                        color: Colors.black.withValues(alpha: 0.3),
                         blurRadius: 15,
                         offset: const Offset(0, 10),
                       ),
@@ -229,7 +231,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                             elevation: 5,
-                            shadowColor: Colors.cyanAccent.withOpacity(0.3),
+                            shadowColor: Colors.cyanAccent.withValues(alpha: 0.3),
                           ),
                           child: _isLoading
                               ? const SizedBox(
