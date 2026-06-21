@@ -186,7 +186,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
     try {
       // 1. Dapatkan Lokasi GPS
-      final Position position = await _determinePosition();
+      double latitude = 0.0;
+      double longitude = 0.0;
+      bool locationSuccess = true;
+
+      try {
+        final Position position = await _determinePosition().timeout(const Duration(seconds: 4));
+        latitude = position.latitude;
+        longitude = position.longitude;
+      } catch (e) {
+        locationSuccess = false;
+        debugPrint("Gagal mendapatkan lokasi GPS: $e");
+      }
 
       // 2. Ambil Foto Kamera
       final XFile? photo = await _picker.pickImage(
@@ -212,18 +223,27 @@ class _HomeScreenState extends State<HomeScreen> {
         jadwal.id,
         userId,
         userEmail,
-        position.latitude,
-        position.longitude,
+        latitude,
+        longitude,
         base64Image,
       );
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Presensi Berhasil! Selamat bertugas.'),
-            backgroundColor: Colors.green,
-          ),
-        );
+        if (locationSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Presensi Berhasil! Selamat bertugas.'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Presensi Berhasil (tanpa koordinat GPS karena akses lokasi ditolak/timeout)'),
+              backgroundColor: Colors.orange,
+            ),
+          );
+        }
       }
     } catch (e) {
       if (mounted) {

@@ -95,12 +95,12 @@ graph TD
 * [ ] Konfigurasi Flutter untuk iOS (jika diperlukan, `GoogleService-Info.plist`).
 * [x] Menginstal dependency/package Flutter yang dibutuhkan di `pubspec.yaml` (firebase_core, firebase_auth, cloud_firestore).
 * [x] Inisialisasi Firebase pada fungsi `main()` di `lib/main.dart`.
-* [ ] Menambahkan dependency tambahan (`geolocator`, `image_picker`, `url_launcher`, `audioplayers`, `flutter_local_notifications` dan `firebase_storage`).
+* [x] Menambahkan dependency tambahan (`geolocator`, `image_picker`, `url_launcher`, `audioplayers`, `flutter_local_notifications` dan `firebase_storage`).
 
 ### **Fase 2: Autentikasi Pengguna & Role Setup**
 * [x] Membuat UI Halaman Login & Register dengan validasi input (email valid, password minimal 6 karakter).
 * [x] Membuat *Authentication Service* untuk membungkus fungsi `signInWithEmailAndPassword`, `createUserWithEmailAndPassword`, dan `signOut`.
-* [x] Mengimplementasikan *Auth State Wrapper* untuk mengarahkan pengguna secara otomatis ke Halaman Utama jika sudah login, atau ke Halaman Login jika belum.
+* [x] Mengimplementasikan *Auth State Wrapper* untuk mengarahkan pengguna secara otomatis ke Halaman Utama jika sudah login, or ke Halaman Login jika belum.
 * [x] Membuat koleksi `users` di Firestore untuk menyimpan role (`admin` / `warga`) dari masing-masing pengguna.
 
 ### **Fase 3: Struktur Data & Firestore CRUD Jadwal Ronda**
@@ -138,10 +138,10 @@ graph TD
   * Implementasi dialog peringatan penugasan/ronda di UI aplikasi sebagai alternatif push notification pada web.
 
 ### **Fase 5: Polishing UI, Roles & Penanganan Error**
-* [ ] Menerapkan estetika premium: Warna tema yang harmonis (contoh: Navy, Dark Teal, atau Slate Blue), sudut membulat (*border radius*), serta *spacing* yang rapi.
-* [ ] Implementasi batasan akses UI berdasarkan Role (misalnya: tombol Tambah/Edit/Hapus Jadwal hanya muncul jika role = `admin`).
-* [ ] Menambahkan pesan error yang user-friendly (misal: "Email salah", "Password tidak cocok", atau "Akses lokasi ditolak").
-* [ ] Menambahkan *loading indicator* saat memproses login/register atau menyimpan data jadwal/presensi/laporan.
+* [x] Menerapkan estetika premium: Warna tema yang harmonis (contoh: Navy, Dark Teal, atau Slate Blue), sudut membulat (*border radius*), serta *spacing* yang rapi.
+* [x] Implementasi batasan akses UI berdasarkan Role (misalnya: tombol Tambah/Edit/Hapus Jadwal hanya muncul jika role = `admin`).
+* [x] Menambahkan pesan error yang user-friendly (misal: "Email salah", "Password tidak cocok", atau "Akses lokasi ditolak").
+* [x] Menambahkan *loading indicator* saat memproses login/register atau menyimpan data jadwal/presensi/laporan.
 
 ### **Fase 6: Pengujian & Penyelesaian Dokumen**
 * [ ] Melakukan testing fungsionalitas CRUD & fitur tambahan secara menyeluruh.
