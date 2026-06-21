@@ -606,6 +606,133 @@ class _HomeScreenState extends State<HomeScreen> {
                         }).toList(),
                       ),
                       
+                      // Kehadiran / Presensi detail
+                      StreamBuilder<List<Presensi>>(
+                        stream: _firestoreService.getPresensiStream(j.id),
+                        builder: (context, presensiSnapshot) {
+                          final presensis = presensiSnapshot.data ?? [];
+                          if (presensis.isEmpty) {
+                            return const SizedBox.shrink();
+                          }
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 16),
+                              const Divider(color: Color(0xFF1E293B)),
+                              const SizedBox(height: 8),
+                              Text(
+                                'Kehadiran Warga (${presensis.length}/${j.petugas.length}):',
+                                style: const TextStyle(
+                                  color: Colors.greenAccent,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: presensis.length,
+                                itemBuilder: (context, pIdx) {
+                                  final p = presensis[pIdx];
+                                  return Container(
+                                    margin: const EdgeInsets.only(bottom: 8),
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFF0F172A),
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: Colors.blueGrey[800]!),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        if (p.fotoBase64.isNotEmpty) ...[
+                                          GestureDetector(
+                                            onTap: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) => Dialog(
+                                                  backgroundColor: const Color(0xFF1E293B),
+                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                                                  child: Column(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: [
+                                                      AppBar(
+                                                        backgroundColor: Colors.transparent,
+                                                        elevation: 0,
+                                                        title: Text(p.userEmail, style: const TextStyle(color: Colors.white, fontSize: 14)),
+                                                        leading: IconButton(
+                                                          icon: const Icon(Icons.close, color: Colors.white),
+                                                          onPressed: () => Navigator.pop(context),
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding: const EdgeInsets.all(16.0),
+                                                        child: ClipRRect(
+                                                          borderRadius: BorderRadius.circular(12),
+                                                          child: Image.memory(
+                                                            base64Decode(p.fotoBase64),
+                                                            fit: BoxFit.contain,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: MouseRegion(
+                                              cursor: SystemMouseCursors.click,
+                                              child: ClipRRect(
+                                                borderRadius: BorderRadius.circular(6),
+                                                child: Image.memory(
+                                                  base64Decode(p.fotoBase64),
+                                                  width: 44,
+                                                  height: 44,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 12),
+                                        ],
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                p.userEmail,
+                                                style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              const SizedBox(height: 2),
+                                              Text(
+                                                'Waktu: ${DateFormat('HH:mm').format(p.waktu)} WIB',
+                                                style: TextStyle(color: Colors.blueGrey[300], fontSize: 11),
+                                              ),
+                                              if (p.latitude != 0.0 || p.longitude != 0.0)
+                                                Text(
+                                                  'GPS: ${p.latitude.toStringAsFixed(5)}, ${p.longitude.toStringAsFixed(5)}',
+                                                  style: TextStyle(color: Colors.cyanAccent.withValues(alpha: 0.7), fontSize: 10),
+                                                )
+                                              else
+                                                Text(
+                                                  'GPS: Tidak ada',
+                                                  style: TextStyle(color: Colors.orangeAccent.withValues(alpha: 0.7), fontSize: 10),
+                                                ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                      
                       // Warga Aksi: Ajukan Tukar Jadwal
                       if (isMyJadwal) ...[
                         const SizedBox(height: 16),
